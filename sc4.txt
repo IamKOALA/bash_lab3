@@ -1,0 +1,11 @@
+#!/bin/bash
+echo "" > 4.txt
+for i in $(ls /proc | grep -E "^[[:digit:]]*$")
+do
+	path="/proc/$i/statm"
+	if [ -r "$path" ]
+	then
+		echo $i $(awk '{print $1 - $2}' "$path") >> 4.txt
+	fi
+done
+echo "$(cat 4.txt | sort -k2rn | tr ' ' ':')" > 4.txt

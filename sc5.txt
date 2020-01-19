@@ -1,0 +1,12 @@
+#!/bin/bash
+> 5.txt
+for pid in $(ps -eo pid | tail -n+2)
+do
+	ppid=$(grep -Esh "^PPid:" "/proc/"$pid"/status" | awk '{print $2;}')
+	avg_time=$(grep -Esh "^avg_atom" "/proc/"$pid"/sched" | awk '{print $3;}')
+	if [[ "$ppid" != "" ]]
+	then
+	echo "ProcessID = "$pid" : Parent_ProcessID = "$ppid" : Avegage_Time = "$avg_time"" >> 5.txt
+	fi
+done
+echo "$(cat 5.txt | sort -nt " " -k7)" > 5.txt
